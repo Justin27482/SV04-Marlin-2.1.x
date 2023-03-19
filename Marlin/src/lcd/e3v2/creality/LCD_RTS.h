@@ -73,7 +73,7 @@ extern int power_off_type_yes;
 #define AUTO_BED_LEVEL_1POINT_VP           0x4000 // changed to 0x4000 from 0x1100 by John Carlson
 
 // added by John Carlson for new bed point leveling display
-#define AUTO_BED_LEVEL_CUR_POINT_VP          0x0110
+#define AUTO_BED_LEVEL_CUR_POINT_VP       0x0110
 #define AUTO_BED_LEVEL_END_POINT          0x0112
 #define AUTO_BED_LEVEL_MESH_VP            0x0111
 #define PID_TUNING_RUNNING_VP             0x1001

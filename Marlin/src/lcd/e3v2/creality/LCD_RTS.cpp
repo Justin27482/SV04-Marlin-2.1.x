@@ -1,4 +1,4 @@
-#include "lcd_rts.h"
+#include "LCD_RTS.h"
 #include <wstring.h>
 #include <stdio.h>
 #include <string.h>
@@ -21,8 +21,9 @@
 #include "../../../gcode/gcode.h"
 #include "../../../module/probe.h"
 
-#include "../../../feature/bedlevel/abl/bbl.h"
 #include "../../../feature/bedlevel/bedlevel.h"
+#include "../../../feature/bedlevel/abl/bbl.h" // Switched to Unified Bed Leveling
+//#include "../../../feature/bedlevel/ubl/ubl.h"
 
 #if ENABLED(HOST_ACTION_COMMANDS)
   #include "../../../feature/host_actions.h"
@@ -356,7 +357,7 @@ void RTSSHOW::RTS_Init()
       RTS_SndData(4, SELECT_MODE_ICON_VP);
     }
   #endif
-  #if ENABLED(AUTO_BED_LEVELING_BILINEAR)
+  #if ENABLED(AUTO_BED_LEVELING_UBL) // Switched to UBL Removed AUTO_BED_LEVELING_BILINEAR
     SERIAL_ECHOLNPGM("lets build and set bed mesh info");
     bool zig = false;
     int8_t inStart, inStop, inInc, showcount;
@@ -388,7 +389,9 @@ void RTSSHOW::RTS_Init()
     }
     SERIAL_ECHOLNPGM("should have output the mesh");
     queue.enqueue_now_P(PSTR("M420 S1"));
+
   #endif
+
 
   last_zoffset = zprobe_zoffset = probe.offset.z;
   RTS_SndData(probe.offset.z * 100, AUTO_BED_LEVEL_ZOFFSET_VP);
@@ -1653,7 +1656,10 @@ void RTSSHOW::RTS_HandleData()
           if (!all_axes_trusted()) {
             queue.enqueue_now_P(PSTR("G28"));
           }
-          queue.enqueue_now_P(PSTR("G29"));
+          queue.enqueue_now_P(PSTR("G29P1"));
+          queue.enqueue_now_P(PSTR("G29P3"));
+          queue.enqueue_now_P(PSTR("M420 S1"));
+          //queue.enqueue_now_P(PSTR("M420 S0"));
         #endif
       }
       if (recdat.data[0] == 6)
@@ -2443,6 +2449,7 @@ void RTSSHOW::RTS_HandleData()
       if (recdat.data[0] == 1)
       {
         settings.save();
+
         //RTS_SndData(StartSoundSet, SoundAddr);
         RTS_AlertBeep();
       }

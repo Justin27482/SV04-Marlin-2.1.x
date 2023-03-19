@@ -68,4 +68,5 @@ public:
   #endif
 };
 
-extern LevelingBilinear bedlevel;
+//extern LevelingBilinear bedlevel;
+extern unified_bed_leveling bedlevel; // Switched to Unified Bed Leveling
